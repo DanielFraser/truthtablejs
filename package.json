@@ -1,7 +1,7 @@
 {
   "name": "truthtablejs",
   "version": "0.1.0",
-  "homepage": "https://ihatelogicerrors.github.io/ticTacToe",
+  "homepage": "https://ihatelogicerrors.github.io/truthtablejs",
   "private": true,
   "dependencies": {
     "namor": "^1.0.1",
