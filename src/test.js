@@ -1,13 +1,3 @@
-let util = require("util");
-
-function createColumns(equation)
-{
-    let cols = getVars(equation);
-    cols.push("result");
-    console.log(cols);
-    return cols
-}
-
 const result = () => {
     return {
 
@@ -46,8 +36,10 @@ function evalResult(bin, words, eq)
 {
     let equation = eq;
     for (let i = 0; i < words.length; i++) {
-        equation = equation.replace(words[i], bin.charAt(i))
+        equation = equation.replace(new RegExp("\\b"+words[i]+"", 'g'), bin.charAt(i));
+        console.log(equation)
     }
+
     return eval(equation)
 }
 
@@ -57,7 +49,6 @@ function getVars(equation)
     let words = new Set();
     let m;
     do {
-        util.format('hello %s', 'world');
         m = re.exec(equation);
         if (m) {
             words.add(m[1]);
@@ -66,5 +57,41 @@ function getVars(equation)
     return Array.from(words)
 }
 
-console.log(createTable("a&b&c&e&f").length);
+function valid(equation)
+{
+    par = parentheses(equation); //check parentheses
+    eq = validForm(equation);
+    return par && eq
+}
+
+function validForm(equation) {
+    if (equation.replace(/\s/g, '').length === 1)
+        return true;
+    let reg = /^\(*[a-zA-Z]\w*(?:\s*[!&|^]\s*\(*[a-zA-Z]\w*\)*)+$/g;
+    return !!equation.match(reg)
+
+}
+
+function parentheses(equation)
+{
+    equation = equation.replace(/\s/g, '');
+    curPar = 0;
+    for (let i = 0; i < equation.length; i++) {
+        c = equation.charAt(i);
+        if (c === '(') {
+            if (i !== 0) {
+                d = equation.charAt(i - 1);
+                if (!d.match(/[!&|^]/g))
+                    return false
+            }
+            curPar++;
+        }
+        else if (c === ')')
+            curPar--
+    }
+    //console.log(curPar.length)
+    return curPar === 0
+}
+console.log(valid("a&"));
+console.log(createTable("a"));
 // createColumns("a&b&cd");

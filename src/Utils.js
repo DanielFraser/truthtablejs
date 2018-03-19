@@ -47,7 +47,7 @@ function evalResult(bin, words, eq)
 {
     let equation = eq;
     for (let i = 0; i < words.length; i++) {
-        equation = equation.replace(words[i], bin.charAt(i))
+        equation = equation.replace(new RegExp("\\b"+words[i]+"", 'g'), bin.charAt(i));
     }
     return eval(equation)
 }
@@ -65,4 +65,42 @@ function getVars(equation)
         }
     } while (m);
     return Array.from(words)
+}
+
+export function valid(equation)
+{
+    let par = parentheses(equation); //check parentheses
+    let eq = validForm(equation);
+    return par && eq
+}
+
+function validForm(equation) {
+    if (equation.replace(/\s/g, '').length === 1)
+        return true;
+    let reg = /^\(*[a-zA-Z]\w*(?:\s*[!&|^]\s*\(*[a-zA-Z]\w*\)*)+$/g;
+    return !!equation.match(reg)
+
+}
+
+function parentheses(equation)
+{
+    equation = equation.replace(/\s/g, '');
+    let curPar = 0;
+    let d;
+    let c;
+    for (let i = 0; i < equation.length; i++) {
+        c = equation.charAt(i);
+        if (c === '(') {
+            if (i !== 0) {
+                d = equation.charAt(i - 1);
+                if (!d.match(/[!&|^]/g))
+                    return false
+            }
+            curPar++;
+        }
+        else if (c === ')')
+            curPar--
+    }
+    //console.log(curPar.length)
+    return curPar === 0
 }
