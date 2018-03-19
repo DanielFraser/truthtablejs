@@ -8,7 +8,8 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-scripts": "1.1.1",
-    "react-table": "^6.8.0"
+    "react-table": "^6.8.0",
+    "react-bootstrap": "latest"
   },
   "scripts": {
     "start": "react-scripts start",
